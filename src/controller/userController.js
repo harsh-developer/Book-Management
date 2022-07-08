@@ -86,7 +86,8 @@ const registerUser = async function (req, res) {
         res.status(500).send({ status: false, msg: err.message})
     }
 }
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
 const login = async (req,res)=>{
 
     try {

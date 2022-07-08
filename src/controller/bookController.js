@@ -1,5 +1,5 @@
-//
 const bookModel = require("../model/booksModel")
+const reviewsModel = require('../model/reviewsModel')
 const mongoose = require('mongoose')
 const userModel =require("../model/usersModel")
 const ObjectId = require('mongoose').Types.ObjectId;
@@ -15,6 +15,8 @@ const isValid = function (value) {
     if (typeof value === Number && value.trim().length === 0) return false
     return true
 }
+
+// CREATE BOOK
 const createBooks = async function (req, res) {
     try {
         let booksdata = req.body
@@ -77,6 +79,7 @@ const createBooks = async function (req, res) {
 
 }
 
+// GET ALL BOOK
 const getBook = async function (req, res) {
     try {
 
@@ -99,7 +102,7 @@ const getBook = async function (req, res) {
         }
 
 
-        const findBook = await booksModel.find({ $and: [data, { isDeleted: false }] }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({ title: 1 })
+        const findBook = await bookModel.find({ $and: [data, { isDeleted: false }] }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({ title: 1 })
 
         if (!findBook.length) return res.status(404).send({ status: false, message: 'Book is Not found' })
 
@@ -113,6 +116,7 @@ const getBook = async function (req, res) {
     }
 }
 
+// GET BOOK DETAIL BY PARAMS
 const getBookbyparams = async (req,res)=>{
     try {
 
@@ -120,19 +124,59 @@ const getBookbyparams = async (req,res)=>{
 
         if(!mongoose.isValidObjectId(bookId))  return res.status(400).send({status:false, message:"Please Enter valid ObjectID"});
 
-        const bookDetails = await booksModel.findById(bookId);
+        const bookDetails = await bookModel.findById(bookId);
 
         if(!bookDetails || (bookDetails.isDeleted === true))  return res.status(404).send({status:false, message:"Book Details is Not Present in Our Database."});
 
-        const reviews = []//await reviewsModel.find({bookId,isDeleted:false});
+        const reviews = await reviewsModel.find({bookId,isDeleted:false});
 
         return res.status(200).send({status:true, message:"Books Details",data:bookDetails,reviews});
         
     } catch (error) {return res.status(500).send({status: false,message: error.message})}
 }
 
+// UPDAT BOOK
+const updateBook = async function (req, res) {
+    try {
+        let id = req.params.bookId
+        let updateDetails = req.body
 
-module.exports = { createBooks,getBook,getBookbyparams }
+        if (Object.keys(updateDetails).length == 0) return res.status(400).send({ status: false, message: "Please enter data for updation." })
+
+        let book = await bookModel.findOne({ _id: id, isDeleted: false });
+
+        if (!book) return res.status(404).send({status: false, msg:'No such book found.'});
+
+        if (Object.keys(updateDetails.category || updateDetails.subcategory)) return res.status(400).send({ status: false, message: "You arn't allowed to update this detail." })
+
+        let updatedBook = await bookModel.findOneAndUpdate({ _id: id }, updateDetails, { new: true });
+        return res.status(200).send({ status: true, data: updatedBook });
+
+    }
+    catch (err) { return res.status(500).send({status:false, msg: err.message })}
+}
+
+// DELETE BY BOOKID
+const deletebookbyid=async (req,res)=> {
+    try{
+        const bookId =req.params.bookId;
+
+        if(!mongoose.isValidObjectId(bookId)) return res.status(400).send({ status: false, msg: 'Please enter valid bookId'})
+    
+        let book= await bookModel.findById(bookId)
+    
+        //check if isDeleated Status is True
+        if (!book || book.isDeleted === ture) return res.status(404).send({status:false,message: "book is not found"})
+        
+         await bookModel.findOneAndUpdate({_id:bookId},{ isDeleted: true, deletedAt: new Date()},{new: true} );
+
+         return res.status(200).send({ status: true, message: "successfuly Deleted" });
+    
+    } catch (error) {return res.status(500).send({status: false,message: error.message})}
+}
+
+  
+module.exports = { createBooks,getBook,getBookbyparams ,updateBook ,deletebookbyid }
 
 
 
