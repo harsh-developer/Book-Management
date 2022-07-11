@@ -8,15 +8,15 @@ const {authentication,authorisation} = require('../middleware/auth')
 
 
 // user
-router.post('/register',registerUser)
-router.post('/login',login)
+router.post('/register',registerUser)     // test perfect
+router.post('/login',login)               // test perfect
 
 //book
-router.post('/books', authentication, createBooks)
-router.get('/books',authentication,getBook)
-router.get('/books/:bookId',authentication,getBookbyparams)
-router.put('/books/:bookId',authentication,authorisation ,updateBook)
-router.delete('/books/:bookId',authentication,authorisation,deletebookbyid)
+router.post('/books', authentication, createBooks)       // test perfect
+router.get('/books',authentication,getBook)                  // test perfect
+router.get('/books/:bookId',authentication,getBookbyparams)     //test perfect
+router.put('/books/:bookId',authentication,authorisation ,updateBook)          //test perfect
+router.delete('/books/:bookId',authentication,authorisation,deletebookbyid)         //test perfect
 
 //review
 router.post('/books/:bookId/review',createReview)

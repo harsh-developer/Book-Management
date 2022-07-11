@@ -32,14 +32,14 @@ const createReview = async function (req, res) {
 
         if (!findBookId) return res.status(404).send({ status: false, message: ' Bookid is not found' })
 
-        if (!isValid(requestBody.reviewedBy)) return res.status(400).send({ status: false, message: 'reviewedBy is Required...' })
+        // if (!isValid(requestBody.reviewedBy)) return res.status(400).send({ status: false, message: 'reviewedBy is Required...' })
         if(!regEx1.test(requestBody.reviewedBy)) return res.status(400).send({status:false , message: 'reviewedBy must be alphabet'})
 
         if(requestBody.review) {
             if(!regEx1.test(requestBody.review))return res.status(400).send({status:false , message: 'review must be alphabet'})
         }
 
-        if (!isValid(requestBody.reviewedAt)) return res.status(400).send({ status: false, message: 'reviewedAt is Required...' })
+        // if (!isValid(requestBody.reviewedAt)) return res.status(400).send({ status: false, message: 'reviewedAt is Required...' })
 
         requestBody.reviewedAt = Date.now()
 
@@ -58,6 +58,7 @@ const createReview = async function (req, res) {
         res.status(500).send({ status: false, message: err.message })
     }
 }
+
 
 // UPDATE REVIEW
 const updateReview = async (req,res)=>{
