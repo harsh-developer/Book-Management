@@ -19,9 +19,9 @@ router.put('/books/:bookId',authentication,authorisation ,updateBook)          /
 router.delete('/books/:bookId',authentication,authorisation,deletebookbyid)         //test perfect
 
 //review
-router.post('/books/:bookId/review',createReview)
-router.put('/books/:bookId/review/:reviewId',updateReview)
-router.delete('/books/:bookId/review/:reviewId',DeleteBookReview)
+router.post('/books/:bookId/review',createReview)     //test perfect
+router.put('/books/:bookId/review/:reviewId',updateReview)      //test perfect
+router.delete('/books/:bookId/review/:reviewId',DeleteBookReview)     //test perfect
 
 
 
