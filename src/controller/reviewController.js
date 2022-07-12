@@ -3,7 +3,7 @@ const bookModel = require("../model/booksModel");
 const mongoose = require('mongoose')
 
 
-// regx
+// regular expression 
 const regEx = /^\w[a-zA-Z.\s]*$/ ;
 const regEx1 = /^\w[a-zA-Z\.]+/;
 
@@ -20,8 +20,6 @@ const createReview = async function (req, res) {
         let requestBody = req.body
         let bookId = req.params.bookId
         
-        // let()
-
         if (Object.keys(requestBody) == 0) return res.status(400).send({ status: false, message: 'Please! Provide data into body 😒' })
 
         if (!mongoose.isValidObjectId(bookId)) return res.status(400).send({ status: false, message: "Invalid book id." })
@@ -45,7 +43,6 @@ const createReview = async function (req, res) {
 
         if (!(requestBody.rating >= 1 && requestBody.rating <= 5)) return res.status(400).send({ status: false, message: 'Rating is between 1 to 5' })
 
-
          let updatebook=await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $inc: { reviews: 1 } }, { new: true })
       
         let saveData = await reviewsModel.create(requestBody)
@@ -60,7 +57,6 @@ const createReview = async function (req, res) {
         res.status(500).send({ status: false, message: err.message })
     }
 }
-
 
 // UPDATE REVIEW
 const updateReview = async (req,res)=>{
@@ -106,7 +102,7 @@ const DeleteBookReview = async function (req, res) {
         if(!mongoose.isValidObjectId(reviewId)) return res.status(400).send({ status: false, msg: 'Please enter valid reviewsId'})
 
         let book = await bookModel.findById(bookId)
-        if (!book) return res.status(404).send({ status: false, message: "This bookId is not present in book DB" })
+        if (!book) return res.status(404).send({ status: false, message: "This book is not present in book DB" })
 
         // check if isDeleated Status is True
         if (book.isDeleted) return res.status(404).send({ status: false, message: "book is already deleted" })

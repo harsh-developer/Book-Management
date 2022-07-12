@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const { updateBook } = require('../controller/bookController');
 const bookModel = require("../model/booksModel")
 
 const  authentication  = async (req,res,next)=>{
@@ -14,7 +13,7 @@ try {
     if(!isVerify) return res.status(400).send({status:false,message:"user has invalid token"})
 
     req.userDetail = isVerify;
-    // req.headers['User-login'] = isVerify._id
+   
     next()
 
 } catch (error) { return res.status(500).send({status:false ,message:error.message})}

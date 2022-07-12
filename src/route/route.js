@@ -6,7 +6,7 @@ const {registerUser,login}=require('../controller/userController')
 
 const {authentication,authorisation} = require('../middleware/auth')
 
-
+// All routes
 // user
 router.post('/register',registerUser)     // test perfect
 router.post('/login',login)               // test perfect
