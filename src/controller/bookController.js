@@ -41,15 +41,18 @@ const createBooks = async function (req, res) {
 
         // title is present or not?
         if (!title) return res.status(400).send({ status: false, message: "Please Enter the Title" });
+
         if (!titleregEx.test(title)) return res.status(400).send({ status: false, message: "title text is invalid" });
 
 
         // excerpt is present or not?
         if (!excerpt) return res.status(400).send({ status: false, message: "Please Enter the excerpt" });
+
         if (!regEx.test(excerpt)) return res.status(400).send({ status: false, message: "excerpt text is invalid it must be alphabet " });
 
         // userId is present or not?
         if (!userId) return res.status(400).send({ status: false, message: "Please Enter the userId" });
+        
         if (!ObjectId.isValid(userId)) return res.status(400).send({ status: false, message: "Id is Invalid" });
 
         //check if userId is present in Db or Not ? 
@@ -218,7 +221,3 @@ const deletebookbyid = async (req, res) => {
 
 
 module.exports = { createBooks, getBook, getBookbyparams, updateBook, deletebookbyid }
-
-
-
-
