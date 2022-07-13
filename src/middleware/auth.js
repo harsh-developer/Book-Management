@@ -10,13 +10,18 @@ try {
 
     const isVerify = jwt.verify(token,"sourabhsubhamgauravhurshalltemsnameproject3");
 
-    if(!isVerify) return res.status(400).send({status:false,message:"user has invalid token"})
-
     req.userDetail = isVerify;
    
     next()
 
-} catch (error) { return res.status(500).send({status:false ,message:error.message})}
+} catch (error) {
+    if(error.message == "invalid token" ) return res.status(400).send({status:false,message:"user has invalid token"})
+
+    if(error.message == "invalid signature" ) return res.status(400).send({status:false,message:"user has invalid token"})
+
+    if(error.message == "jwt expired" ) return res.status(400).send({status:false,message:"please login one more."})
+
+     return res.status(500).send({status:false ,message:error.message})}
 
 }
 

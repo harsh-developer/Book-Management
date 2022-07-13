@@ -82,7 +82,9 @@ const updateReview = async (req,res)=>{
 
         if(!isReview || isReview.isDeleted === true)  return res.status(404).send({ status: false, message: "Review is Not Found." })
 
-         await reviewsModel.findOneAndUpdate({_id:reviewId},req.body,{new:true});
+        if(isReview.bookId === bookId) return res.status(404).send({ status: false, message: "Your review is not presnt is this book" })
+
+        await reviewsModel.findOneAndUpdate({_id:reviewId , bookId:bookId},req.body,{new:true});
 
         const reviewsData = await reviewsModel.find({bookId}).select({bookId:1,reviewedBy:1,reviewedAt:1,rating:1,review:1});
 
